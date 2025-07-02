@@ -1,11 +1,11 @@
 services:
-  - type: web
+  - type: worker
     name: telegram-bot
     env: python
     buildCommand: "pip install -r requirements.txt"
     startCommand: "python3 run.py"
     plan: free
-    autoDeploy: false
+    autoDeploy: true
     envVars:
       - key: BOT_TOKEN
         value: 7839007712:AAERxGdintfRM6xMAwoTWVtOipzRPvyf3Gs

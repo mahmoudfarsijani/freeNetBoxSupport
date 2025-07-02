@@ -365,10 +365,9 @@ class TelegramBot:
             logger.info("🤖 ربات تلگرام شروع شد...")
             logger.info("🔄 در انتظار پیام‌ها...")
             
-            # اجرای ساده و سازگار
+            # اجرای ساده و سازگار با نسخه 20.8
             self.application.run_polling(
-                allowed_updates=Update.ALL_TYPES,
-                drop_pending_updates=True
+                allowed_updates=Update.ALL_TYPES
             )
         except Exception as e:
             logger.error(f"❌ خطا در اجرای ربات: {e}")
