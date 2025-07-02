@@ -10,21 +10,11 @@ import os
 try:
     import imghdr
 except ImportError:
-    # Create a minimal polyfill for imghdr
+    # Create a simple polyfill for imghdr (bot doesn't process images)
     class ImghdrPolyfill:
         @staticmethod
         def what(file, h=None):
-            try:
-                from PIL import Image
-                if hasattr(file, 'read'):
-                    file.seek(0)
-                    img = Image.open(file)
-                    return img.format.lower()
-                else:
-                    with Image.open(file) as img:
-                        return img.format.lower()
-            except:
-                return None
+            return None  # Simple fallback for text-based bot
     
     import sys
     sys.modules['imghdr'] = ImghdrPolyfill()
