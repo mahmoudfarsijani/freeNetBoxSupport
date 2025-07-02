@@ -5,6 +5,30 @@
 
 import logging
 import os
+
+# Fix for imghdr module removal in Python 3.11+
+try:
+    import imghdr
+except ImportError:
+    # Create a minimal polyfill for imghdr
+    class ImghdrPolyfill:
+        @staticmethod
+        def what(file, h=None):
+            try:
+                from PIL import Image
+                if hasattr(file, 'read'):
+                    file.seek(0)
+                    img = Image.open(file)
+                    return img.format.lower()
+                else:
+                    with Image.open(file) as img:
+                        return img.format.lower()
+            except:
+                return None
+    
+    import sys
+    sys.modules['imghdr'] = ImghdrPolyfill()
+
 from telegram import Update, ReplyKeyboardMarkup
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext
 
