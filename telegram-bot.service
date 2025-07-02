@@ -1,0 +1,14 @@
+[Unit]
+Description=Telegram Bot Service
+After=network.target
+
+[Service]
+Type=simple
+User=muti
+WorkingDirectory=/Users/muti/Desktop/coding/projB
+ExecStart=/usr/bin/python3 run.py
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target 
