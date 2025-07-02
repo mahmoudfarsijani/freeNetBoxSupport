@@ -27,6 +27,8 @@ logging.basicConfig(
 
 logger = logging.getLogger(__name__)
 
+# Fixed version - Compatible with python-telegram-bot 20.8+
+
 def check_config():
     """بررسی تنظیمات ربات"""
     bot_token = None
