@@ -1,12 +1,11 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-
 """
-ربات تلگرام ساده - سازگار با نسخه 20.8+
+🤖 ربات تلگرام ساده FreeNetBox
+نسخه بهینه شده برای میزبانی ابری
 """
 
 import logging
 import os
+import asyncio
 from telegram import Update, ReplyKeyboardMarkup
 from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes
 
@@ -178,12 +177,14 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     except:
         pass
 
-def main():
-    """تابع اصلی"""
-    logger.info("🤖 شروع ربات تلگرام ساده...")
-    
+async def setup_application():
+    """تنظیمات Application"""
     # ساخت Application
-    application = Application.builder().token(BOT_TOKEN).build()
+    application = (
+        Application.builder()
+        .token(BOT_TOKEN)
+        .build()
+    )
     
     # اضافه کردن handlers
     application.add_handler(CommandHandler("start", start_command))
@@ -196,10 +197,30 @@ def main():
     application.add_handler(MessageHandler(filters.Regex("🚀 شروع"), handle_start_button))
     application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
     
-    logger.info("🔄 در انتظار پیام‌ها...")
+    return application
+
+def main():
+    """تابع اصلی"""
+    logger.info("🤖 شروع ربات تلگرام ساده...")
     
-    # اجرای ربات
-    application.run_polling(allowed_updates=Update.ALL_TYPES)
+    try:
+        # ساخت Application
+        app = asyncio.get_event_loop().run_until_complete(setup_application())
+        
+        logger.info("🔄 در انتظار پیام‌ها...")
+        
+        # اجرای ربات
+        app.run_polling(
+            drop_pending_updates=True,
+            allowed_updates=Update.ALL_TYPES
+        )
+        
+    except Exception as e:
+        logger.error(f"❌ خطا در اجرای ربات: {e}")
+        # تلاش مجدد پس از 5 ثانیه
+        import time
+        time.sleep(5)
+        main()
 
 if __name__ == "__main__":
     main() 
